@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
+} from "react-router-dom";
+import * as Page from './pages'
+import {Provider} from "mobx-react";
+import AuthStore from "./stores/AuthStore";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Et <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <Provider auth={new AuthStore()}>
+            <div className="App">
+                <Router>
+                    <Switch>
+                        <Route exact path='/auth'>
+                            <Page.AuthPresenter/>
+                        </Route>
+                        <Route exact path='/auth/:provider'>
+                            <Page.AuthLoadingPresenter/>
+                        </Route>
+                        <Route exact path='/u/:username'>
+                            유저 대표 페이지
+                        </Route>
+                        <Route exact path='/'>
+                            <Page.MainPresenter/>
+                        </Route>
+                    </Switch>
+                </Router>
+            </div>
+        </Provider>
+    );
 }
 
 export default App;
